@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert' as cv;
 
+import 'package:moviesapp/movieDetailPage.dart';
+
 // import "dart:async";
 class MoviesList extends StatefulWidget {
   @override
@@ -11,9 +13,14 @@ class MoviesList extends StatefulWidget {
 }
 
 class _MoviesListState extends State<MoviesList> {
+  // _MoviesListState(){
+  //   print("i'm inside constructor");
+  //   _getMoviesList();
+  // }
   Widget loadingWidget = SizedBox();
   double height, width;
   List<Widget> _listItems = List();
+  bool isFetched = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,6 +41,9 @@ class _MoviesListState extends State<MoviesList> {
     return IconButton(
         icon: Icon(Icons.refresh),
         onPressed: () {
+          setState(() {
+            isFetched = false;
+          });
           _getMoviesList();
         });
   }
@@ -51,7 +61,10 @@ class _MoviesListState extends State<MoviesList> {
   }
 
   Widget _cardBody() {
-    // _getMoviesList();
+    if (isFetched == false) {
+      _getMoviesList();
+    }
+
     return Column(
       children: [
         loadingWidget,
@@ -67,7 +80,7 @@ class _MoviesListState extends State<MoviesList> {
 
   Widget _singleCard() {
     return SizedBox(
-      height: height * .81,
+      height: height * .8,
       width: width,
       child: ListView(
         children: _listItems,
@@ -75,10 +88,15 @@ class _MoviesListState extends State<MoviesList> {
     );
   }
 
-  Widget _card(String movieTitle, int movieYear, String movieImage) {
+  Widget _card(
+      String movieTitle, int movieYear, String movieImage, int movieId) {
     return GestureDetector(
       onTap: () {
-        _gotoDetailPage();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MovieDetail(movieId: movieId)));
+        // _gotoDetailPage(movieId);
       },
       child: Card(
         color: Colors.blue.shade100,
@@ -102,15 +120,6 @@ class _MoviesListState extends State<MoviesList> {
         ),
       ),
     );
-  }
-
-  _gotoDetailPage() async {
-    print('going to detail page ');
-    _enableLoading();
-    String url = "https://yts.mx/api/v2/movie_details.json?movie_id=25409";
-    Response response = await get(url);
-    print(response.body);
-    _disableLoading();
   }
 
   Widget _nextPage() {
@@ -167,10 +176,12 @@ class _MoviesListState extends State<MoviesList> {
       // String movieImage = _eachMoviedata['cover_image'];
       int movieYear = _eachMoviedata['year'];
       int movieId = _eachMoviedata['id'];
-      Widget eachCard = _card(movieTitle, movieYear, movieImage);
+      Widget eachCard = _card(movieTitle, movieYear, movieImage, movieId);
       tempList.add(eachCard);
     }
     _listItems = tempList;
-    setState(() {});
+    setState(() {
+      this.isFetched = true;
+    });
   }
 }

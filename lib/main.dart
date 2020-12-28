@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moviesapp/home.dart';
+import 'package:moviesapp/movieDetailPage.dart';
 import 'package:moviesapp/movieslist.dart';
 
 void main() {
@@ -13,11 +14,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Movies App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue, appBarTheme: AppBarTheme(centerTitle: true),),
-      
-      home: HomePage(),
-      // home: MoviesList(),
-      routes: {"/moviesList": (context) => MoviesList()},
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        appBarTheme: AppBarTheme(centerTitle: true),
+      ),
+
+      // home: HomePage(),
+      // home: MovieDetail(),
+      home: MoviesList(),
+      routes: {
+        "/moviesList": (context) => MoviesList(),
+        "/moviesDetail": (context) => MovieDetail()
+      },
     );
   }
 }
