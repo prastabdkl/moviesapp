@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(centerTitle: true),
       ),
 
-      // home: HomePage(),
+      home: HomePage(),
       // home: MovieDetail(),
-      home: MoviesList(),
+      // home: MoviesList(),
       routes: {
         "/moviesList": (context) => MoviesList(),
         "/moviesDetail": (context) => MovieDetail()

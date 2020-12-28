@@ -86,6 +86,7 @@ class _MovieDetailState extends State<MovieDetail> {
     // String url = "https://yts.mx/api/v2/movie_details.json?movie_id=$movieId";
     Response response = await get(url);
     print('done get method ');
+    // print(response.body);
     _responseDecoder(response.body);
     // _disableLoading();
   }

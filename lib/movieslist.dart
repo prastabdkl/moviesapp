@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:wasm';
 
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _MoviesListState extends State<MoviesList> {
   double height, width;
   List<Widget> _listItems = List();
   bool isFetched = false;
+  int page = 1;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -41,17 +43,20 @@ class _MoviesListState extends State<MoviesList> {
     return IconButton(
         icon: Icon(Icons.refresh),
         onPressed: () {
+          var r = Random();
+
           setState(() {
             isFetched = false;
+            page = r.nextInt(100);
           });
-          _getMoviesList();
+          _getMoviesList(page);
         });
   }
 
-  _getMoviesList() async {
+  _getMoviesList(int page) async {
     _enableLoading();
     // Future.delayed(Duration(seconds: 5));
-    var url = "https://yts.mx/api/v2/list_movies.json";
+    var url = "https://yts.mx/api/v2/list_movies.json?page=$page";
     Response response = await get(url);
     // get(url).then((value) => _disableLoading());
     // print(response.body);
@@ -62,26 +67,20 @@ class _MoviesListState extends State<MoviesList> {
 
   Widget _cardBody() {
     if (isFetched == false) {
-      _getMoviesList();
+      _getMoviesList(page);
     }
 
     return Column(
       children: [
         loadingWidget,
         // Text('Movie of the year'),
-        _singleCard(),
-        RaisedButton(
-          onPressed: () {},
-          child: _nextPage(),
-        )
+        _singleCard(), _nextPage(),
       ],
     );
   }
 
   Widget _singleCard() {
-    return SizedBox(
-      height: height * .8,
-      width: width,
+    return Expanded(
       child: ListView(
         children: _listItems,
       ),
@@ -106,7 +105,10 @@ class _MoviesListState extends State<MoviesList> {
             Row(
               children: [
                 Text('Title :'),
-                Text(movieTitle),
+                Text(
+                  movieTitle,
+                  overflow: TextOverflow.visible,
+                ),
               ],
             ),
             Row(
@@ -126,7 +128,32 @@ class _MoviesListState extends State<MoviesList> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
-      children: [Text('Goto Next Page'), Icon(Icons.arrow_forward)],
+      children: [
+        RaisedButton(
+          child: Icon(Icons.arrow_back),
+          onPressed: () {
+            setState(() {
+              isFetched = false;
+              page--;
+            });
+            _getMoviesList(page);
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(page.toString(),style: TextStyle(fontSize: 20),),
+        ),
+        RaisedButton(
+          child: Icon(Icons.arrow_forward),
+          onPressed: () {
+            setState(() {
+              isFetched = false;
+              page++;
+            });
+            _getMoviesList(page);
+          },
+        ),
+      ],
     );
   }
 
