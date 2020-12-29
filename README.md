@@ -4,14 +4,15 @@ An application for movie freaks.
 
 Features:
 
-List new movies 
-Markup : * Bullet list
-          * Go to new page and go back and forward
-Go to random page using refresh button
-Get movie details when clicked on any movie
-obtain movie name, movie rating, movie runtime, movie descritpion, download links, download quality and size and list of cast.
-Download a torrent link using download url option directly from the app
-and much more...
+•	List new movies 
+•	Go to new page and go back and forward
+•	Go to random page using refresh button
+•	Get movie details when clicked on any movie
+•	Obtain movie name, movie rating, movie runtime, movie description, download links, and download quality and size and list of cast.
+•	Download a torrent link using download url option directly from the app
+•	And much more...
+
+
 
 ![alt text](https://i.imgur.com/CjDAFCw.png)
 ![alt text](https://i.imgur.com/GtxqbND.png)
